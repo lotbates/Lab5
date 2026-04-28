@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch Set Theory & Automated Composition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f6;
+      --text: #1a1916;
+      --muted: #6b6860;
+      --accent: #c24a14;
+      --border: #e0ddd6;
+      --code-bg: #f0ede6;
+      --mono: 'Space Mono', monospace;
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'Outfit', sans-serif;
+    }
+    body { font-family: var(--serif); background: var(--bg); color: var(--text); line-height: 1.8; }
+
+    /* Header */
+    .site-header { border-bottom: 1px solid var(--border); padding: 14px 0; }
+    .site-header-inner { max-width: 720px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header span { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+    .site-header a { font-family: var(--mono); font-size: 10px; color: var(--accent); text-decoration: none; letter-spacing: .08em; }
+
+    /* Hero */
+    .hero { background: #1a1916; color: #f0ede4; padding: 64px 24px 52px; }
+    .hero-inner { max-width: 720px; margin: 0 auto; }
+    .hero-tag { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #c24a14; margin-bottom: 18px; display: block; }
+    .hero h1 { font-family: var(--serif); font-size: 2.4rem; font-weight: 600; line-height: 1.2; margin-bottom: 18px; }
+    .hero p.lede { font-size: 1.1rem; color: #a09c92; line-height: 1.7; max-width: 580px; }
+    .hero-meta { margin-top: 28px; font-family: var(--mono); font-size: 10px; color: #555; letter-spacing: .08em; }
+
+    /* Body */
+    .body { max-width: 720px; margin: 0 auto; padding: 52px 24px 80px; }
+
+    p { font-size: 1.02rem; line-height: 1.85; margin-bottom: 1.4rem; }
+    h2 { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; margin: 2.8rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 2rem 0 .6rem; }
+
+    code, .code-inline { font-family: var(--mono); font-size: .83rem; background: var(--code-bg); padding: 2px 6px; border-radius: 3px; color: #7a3010; }
+
+    .callout { background: var(--code-bg); border-left: 3px solid var(--accent); padding: 16px 20px; margin: 2rem 0; border-radius: 0 4px 4px 0; }
+    .callout p { margin: 0; font-style: italic; color: #3a3830; }
+
+    pre { background: #1a1916; color: #d4cfc4; font-family: var(--mono); font-size: .82rem; padding: 20px; border-radius: 5px; overflow-x: auto; margin: 1.5rem 0 2rem; line-height: 1.65; }
+    pre .kw { color: #d95f2a; }
+    pre .fn { color: #f0c040; }
+    pre .cm { color: #555; font-style: italic; }
+    pre .str { color: #2dcc70; }
+
+    .op-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: var(--sans); }
+    .op-table th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 8px 12px; border-bottom: 2px solid var(--border); text-align: left; }
+    .op-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: .93rem; }
+    .op-table tr:last-child td { border: none; }
+    .op-name { font-family: var(--mono); font-weight: 700; color: var(--accent); }
+    .op-math { font-family: var(--mono); font-size: .82rem; color: #555; }
+
+    .fig { margin: 2rem 0; padding: 20px; background: var(--code-bg); border-radius: 5px; }
+    .fig-caption { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 10px; letter-spacing: .06em; }
+
+    /* Musical examples as styled boxes */
+    .music-ex { font-family: var(--mono); font-size: .88rem; background: #1a1916; color: #d4cfc4; padding: 14px 18px; border-radius: 4px; margin: 1.2rem 0; letter-spacing: .04em; }
+    .music-ex .op-tag { color: #d95f2a; margin-right: 10px; }
+    .music-ex .notes { color: #f0c040; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; max-width: 720px; margin: 0 auto; font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .06em; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <span>COMS 3430 · Computational Sound · Lab 5 Blog</span>
+    <a href="lab5.html">← Back to Composer App</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Lab 5 · Automated Composition</span>
+    <h1>Pitch Set Composer</h1>
+    <div class="hero-meta">Spring 2026 &nbsp;·&nbsp; COMS 3430 &nbsp;·&nbsp; Pitch Set Theory (Part I selection)</div>
+  </div>
+</div>
+
+<div class="body">
+
+  <p>In pitch set theory, the compositional grammar is the Dihedral-12 group, and every operation you apply is simultaneously a group element and a musical gesture.</p>
+
+  <p>Coding this compositional grammar helped me visualize the relationship between mathematical operations and musical structures.</p>
+
+  <h2>What I Built</h2>
+
+  <p>This pitch set composer lets you enter an initial pitch class sequence, select which operations from the D₁₂ group you want to allow, and generates a multi-phrase composition by randomly applying those operations in sequence. It plays back the result via the Web Audio API, with a pitch clock visualization and piano roll to show you what's happening as it plays.</p>
+
+  <p>The core 12-tone theory operations are shown below:</p>
+
+  <table class="op-table">
+    <tr><th>Operation</th><th>Formula</th><th>Group Structure</th><th>Musical Effect</th></tr>
+    <tr>
+      <td><span class="op-name">Tₙ</span></td>
+      <td><span class="op-math">(p + n) mod 12</span></td>
+      <td>Rotation in D₁₂</td>
+      <td>Shifts all pitches up by n semitones</td>
+    </tr>
+    <tr>
+      <td><span class="op-name">I</span></td>
+      <td><span class="op-math">(12 − p) mod 12</span></td>
+      <td>Reflection in D₁₂</td>
+      <td>Mirrors the interval structure</td>
+    </tr>
+    <tr>
+      <td><span class="op-name">TₙI</span></td>
+      <td><span class="op-math">(n − p) mod 12</span></td>
+      <td>Composition of T and I</td>
+      <td>Inversion transposed to new starting pitch</td>
+    </tr>
+    <tr>
+      <td><span class="op-name">R</span></td>
+      <td>reverse ordering</td>
+      <td>Temporal (not D₁₂ strictly)</td>
+      <td>Plays the sequence backwards</td>
+    </tr>
+    <tr>
+      <td><span class="op-name">RI</span></td>
+      <td>reverse ∘ invert</td>
+      <td>Combination</td>
+      <td>Inverted and reversed</td>
+    </tr>
+  </table>
+
+  <p>The composition generator picks from this pool randomly at each step, building a chain of phrases. The Web Audio engine then schedules these as actual sound using <code>AudioContext.currentTime</code> for sample-accurate timing.</p>
+
+  <h2>Significance of the Group Structure</h2>
+
+  <p>When I first wrote the <code>inverse</code> function, I wrote <code>p => 12 - p</code> without the mod. For pitch class 0, this gives 12, which is outside Z₁₂. The fix is to add <code>% 12</code> but the bug forced me to understand why the modular arithmetic is non-negotiable. It is because the group's closure property means every operation must map pitch classes back to pitch classes.</p>
+
+  <p>When I fixed this bug I found that the group structure provides a robust framework for generating coherent musical sequences.</p>
+
+  <div class="callout">
+    <p>The group-theoretic closure property of D₁₂ means that any composition of transpositions and inversions stays within the same formal space. The return type of every operation is always <code>PitchClassSet</code>, never <code>ArbitraryInteger[]</code>.</p>
+  </div>
+
+  <h2>Pitch Classes Are Abstract</h2>
+
+  <p>Pitch set theory is octave-agnostic. Pitch class 0 is "C" — but it doesn't say which C. Pitch class 7 is "G" — but which G? When you play back a generated composition, you have to make a choice the theory doesn't make for you.</p>
+
+  <p>After some experimentation, I ended up assigning a whole-phrase octave contour where each phrase gets a base octave, which shifts gently up and back over the course of the composition. This creates a sense of architectural rise and fall that sounds quite well.</p>
+
+  <p>The automated part of automated composition isn't doing as much work as it seems. The serial operations are generative, but the octave mapping is a layer of algorithmic-design choice that shapes the perceptual result.</p>
+
+  <h2>Retrograde Is Mathematically Symmetric but Perceptually Asymmetric</h2>
+
+  <p>Consider the phrase <code>[C, D, E, F]</code> and its retrograde <code>[F, E, D, C]</code>. They have identical pitch content. In set-theoretic terms, they're the same set. But when played in sequence you hear two completely different gestures — one ascending, one descending. One feels like a question, the other like an answer (or vice versa, depending on the surrounding context).</p>
+
+  <p>Some of the structure that matters most for musical perception (narrative arc, temporal directionality, phrase-level tension and release) isn't captured by the pitch-class operations at all. The implementation in this project helped me understand this distinction.</p>
+
+  <h2>Randomness as Compositional Grammar</h2>
+
+  <p>Below is the random operation selection in my generator:</p>
+
+<pre><span class="cm">// Pick a random operation from the enabled pool</span>
+<span class="kw">const</span> op = pool[<span class="fn">Math.floor</span>(<span class="fn">Math.random</span>() * pool.length)];
+current = op.<span class="fn">fn</span>(current);
+</pre>
+
+  <p>The content of <code>pool</code> is what the composer controls. If you only enable <code>T₁</code> through <code>T₃</code>, you get a composition that drifts chromatically upward in small steps. If you enable only <code>R</code> and <code>I</code>, you get constant pitch-space mirroring. If you include <code>TₙI</code> operations, the melodic contour becomes more jagged and unpredictable.</p>
+
+  <p>In this generator you're choosing the space of transformations the composition can make. The random walk happens inside the grammar you choose.</p>
+
+  <h2>Scheduling Notes in WebAudio</h2>
+
+  <p>One thing this lab reinforced about WebAudio specifically: the difference between scheduling audio and triggering audio is significant. One might set up an oscillator and start it when a <code>setTimeout</code> fires. This produces audible timing drift at any tempo above ~80 BPM because <code>setTimeout</code> is not sample-accurate.</p>
+
+  <p>A better approach is to pre-schedule all notes using <code>AudioContext.currentTime</code> as an absolute timeline, then use <code>setTimeout</code> for UI updates — highlighting which note is playing, updating the pitch clock visualization. In this way, the audio engine runs ahead of the UI callbacks.</p>
+
+<pre><span class="cm">// Schedule audio: sample-accurate via AudioContext clock</span>
+osc.<span class="fn">start</span>(t);  osc.<span class="fn">stop</span>(t + duration);
+
+<span class="cm">// Schedule UI: approximate, via wall-clock delay</span>
+<span class="fn">setTimeout</span>(() =&gt; highlightNote(phraseIdx, noteIdx), wallDelay);</pre>
+I
+  <p>Implementing this separation made me appreciate the Web Audio API design. The <code>AudioContext</code> clock is isolated from the JavaScript event loop so that audio scheduling can be deterministic even when the UI thread is busy.</p>
+
+  <h2>Notes for Next Time</h2>
+
+  <p>The most obvious limitation of my implementation is that it operates on pitch classes as an undifferentiated sequence so that every note gets the same duration. Extending the system to serialize note durations would be a natural next step and would produce more varied output.</p>
+
+  <h2>Conclusion</h2>
+
+  <p>Implementing pitch set theory taught me about a deeper level of pitch-class relationships in music.</p>
+
+  <p>But music isn't just pitch-class relationships. It's time, timbre, register, dynamics, and the way a listener's working memory stitches phrases together into narrative. The pitch set operations handle one dimension of that, but the more complex parts would be decided by the composer.</p>
+
+  <p>That boundary between the formal and the expressive is what makes this an interesting domain. Not because the math is sophisticated, but because implementing it reveals the limitations of this formal approach.</p>
+
+</div>
+
+<footer>
+  COMS 3430 — Computational Sound &nbsp;·&nbsp; Spring 2026 &nbsp;·&nbsp; Lab 5 Blog Post &nbsp;·&nbsp;
+  <a href="lab5.html" style="color:#c24a14; text-decoration:none;">Launch Composer App →</a>
+</footer>
+
+</body>
+</html>
